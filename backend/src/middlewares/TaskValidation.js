@@ -20,18 +20,25 @@ const TaskValidation = async (req, res, next) => {
   } else if (isPast(new Date(when))) {
     return res.status(400).json({ error: "Escolha uma hora futura..." });
   } else {
-   
     let exists;
-    exists = await TaskModel.findOne({
-      'when': { '$eq': new Date(when) },
-      'macaddress': { $in: req.body.macaddress },
-    });
+    if (req.aprams.id) {
+      exists = await TaskModel.findOne({
+        _id: { $ne: req.params.id },
+        when: { $eq: new Date(when) },
+        macaddress: { $in: req.body.macaddress },
+      });
+    } else {
+      exists = await TaskModel.findOne({
+        when: { $eq: new Date(when) },
+        macaddress: { $in: req.body.macaddress },
+      });
+    }
     if (exists) {
       return res
         .status(400)
         .json({ error: "Já existe atividade nessa data e hora..." });
     }
-   
+
     next();
   }
 };
