@@ -21,7 +21,7 @@ const TaskValidation = async (req, res, next) => {
     return res.status(400).json({ error: "Escolha uma hora futura..." });
   } else {
     let exists;
-    if (req.aprams.id) {
+    if (req.params.id) {
       exists = await TaskModel.findOne({
         _id: { $ne: req.params.id },
         when: { $eq: new Date(when) },
