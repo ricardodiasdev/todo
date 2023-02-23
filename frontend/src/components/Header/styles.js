@@ -34,6 +34,7 @@ export const RightSide = styled.div`
     font-weight: bold;
     text-decoration: none;
     margin: 0 10px;
+    transition: all 0.3s ease;
 
     &:hover {
       color: #ee6b26;

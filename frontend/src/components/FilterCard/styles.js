@@ -10,6 +10,7 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: space-around;
   cursor: pointer;
+  transition: all 0.3s ease;
 
   img {
     width: 25px;
