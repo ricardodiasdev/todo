@@ -9,8 +9,9 @@ import FilterCard from "../../components/FilterCard";
 import TaskCard from "../../components/TaskCards";
 
 function Home() {
-  const [filterActived, setFilterActived] = useState('all');
+  const [filterActived, setFilterActived] = useState("all");
   const [tasks, setTasks] = useState([]);
+  const [lateCount, setLateCount] = useState();
 
   useEffect(() => {
     async function loadTasks() {
@@ -18,15 +19,27 @@ function Home() {
         .get(`/task/filter/${filterActived}/22:22:22:22:22:22`)
         .then((response) => {
           setTasks(response.data);
-          console.log(response.data);
         });
     }
     loadTasks();
   }, [filterActived]);
 
+  useEffect(() => {
+    async function lateVerify() {
+      await api.get(`/task/filter/late/22:22:22:22:22:22`).then((response) => {
+        setLateCount(response.data.length);
+      });
+    }
+    lateVerify();
+  }, [filterActived]);
+
+  function handleClickBell() {
+    setFilterActived("late");
+  }
+
   return (
     <S.Container>
-      <Header />
+      <Header lateCount={lateCount} clickBell={handleClickBell} />
       <S.FilterArea>
         <FilterCard
           title="Todos"
@@ -55,7 +68,7 @@ function Home() {
         />
       </S.FilterArea>
       <S.Title>
-        <h3>TAREFAS</h3>
+        <h3>{filterActived === 'late' ? 'TAREFAS ATRASADAS' : 'TAREFAS'}</h3>
       </S.Title>
       <S.Content>
         {tasks.map((t) => (
