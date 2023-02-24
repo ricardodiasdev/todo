@@ -30,7 +30,7 @@ function Home() {
       <S.FilterArea>
         <FilterCard
           title="Todos"
-          actived={filterActived === "all" ? true : false}
+          actived={filterActived === "all"}
           onClick={() => setFilterActived("all")}
         />
         <FilterCard
