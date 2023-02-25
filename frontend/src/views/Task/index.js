@@ -7,13 +7,21 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 import TypeIcons from "../../utils/typeIcons";
+import {toast} from 'react-toastify'
 
-import iconCalender from "../../assets/calendar.png";
-import iconClock from "../../assets/clock.png";
+// import iconCalender from "../../assets/calendar.png";
+// import iconClock from "../../assets/clock.png";
 
 function Task() {
   const [lateCount, setLateCount] = useState();
   const [type, setType] = useState();
+  const [id, setId] = useState();
+  const [done, setDone] = useState(false);
+  const [title, setTitle] = useState();
+  const [description, setDescription] = useState();
+  const [date, setDate] = useState();
+  const [hour, setHour] = useState();
+  const [macaddress, setMacaddress] = useState('22:22:22:22:22:22');
 
   useEffect(() => {
     async function lateVerify() {
@@ -24,6 +32,14 @@ function Task() {
     lateVerify();
   }, []);
 
+  async function handleSaveButton(){
+    await api.post('/task', {
+      macaddress, type, title, description, when: `${date}T${hour}:00.000`
+    })
+    .then(() => {toast.success("Tarefa cadastrada com sucesso!")})
+    .catch(() => {toast.warn("Clique na tarefa e preencha todos os campos...")})
+  }
+
   return (
     <S.Container>
       <Header lateCount={lateCount} />
@@ -32,7 +48,7 @@ function Task() {
           {TypeIcons.map(
             (icon, index) =>
               index > 0 && (
-                <button type="button" onClick={() => setType(index)}>
+                <button key={id} type="button" onClick={() => setType(index)}>
                   <img
                     src={icon}
                     alt="Tipo da Tarefa"
@@ -44,30 +60,54 @@ function Task() {
         </S.TypeIcons>
         <S.Input>
           <span>Título</span>
-          <input type="text" placeholder="Título da tarefa"></input>
+          <input
+            type="text"
+            placeholder="Título da tarefa"
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          />
         </S.Input>
         <S.TextArea>
-          <span>Título</span>
-          <textarea rows={5} placeholder="Detalhes da tarefa"></textarea>
+          <span>Descrição</span>
+          <textarea
+            rows={5}
+            placeholder="Detalhes da tarefa"
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+          />
         </S.TextArea>
         <S.Input>
           <span>Data</span>
-          <input type="date"  placeholder="Título da tarefa"></input>
-        {/* <img src={iconCalender} alt="Calendário" /> */}
+          <input
+            type="date"
+            placeholder="Título da tarefa"
+            onChange={(e) => setDate(e.target.value)}
+            value={date}
+          />
+          {/* <img src={iconCalender} alt="Calendário" /> */}
         </S.Input>
         <S.Input>
           <span>Hora</span>
-          <input type="time" placeholder="Título da tarefa"></input>
-        { /* <img src={iconClock} alt="Relógio" /> */}
+          <input
+            type="time"
+            placeholder="Título da tarefa"
+            onChange={(e) => setHour(e.target.value)}
+            value={hour}
+          />
+          {/* <img src={iconClock} alt="Relógio" /> */}
         </S.Input>
         <S.Options>
           <div>
-            <input type="checkbox" />
-            <span>CONCLUÍDO</span>    
+            <input
+              type="checkbox"
+              checked={done}
+              onChange={() => setDone(!done)}
+            />
+            <span>CONCLUÍDO</span>
           </div>
           <button>EXCLUIR</button>
         </S.Options>
-        <S.Save>
+        <S.Save onClick={handleSaveButton}>
           <button>SALVAR</button>
         </S.Save>
       </S.Form>
