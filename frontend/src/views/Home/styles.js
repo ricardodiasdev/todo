@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
+  margin-bottom: 70px;
 `;
 
 export const FilterArea = styled.div`
