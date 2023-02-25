@@ -1,16 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Home from './views/Home';
-import Task from './views/Task';
+import Path from './routes';
 
 import { ToastContainer} from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
+import Header from './components/Header';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Task />
+    <Path />
     <ToastContainer autoClose={2000}/> 
   </React.StrictMode>
 );
