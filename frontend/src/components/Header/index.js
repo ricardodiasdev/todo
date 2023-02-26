@@ -17,7 +17,7 @@ function Header({lateCount, clickBell}) {
         <span className="divider">|</span>
         <Link to={'/task'}>NOVA TAREFA</Link>
         <span className="divider">|</span>
-        <Link to={'/'}>SINCRONIZAR TAREFA</Link>
+        <Link to={'/qrcode'}>SINCRONIZAR TAREFA</Link>
         <span className="divider">|</span>
         <button id="notification" onClick={clickBell}>
           <img src={bell} alt="Notificação" />
