@@ -10,6 +10,8 @@ export default function Path() {
       <Routes>
         <Route path="/" exact element={<Home/>} />
         <Route path="/task"  element={<Task/>} />
+        <Route path="/task/:id"  element={<Task/>} />
+
       </Routes>
     </BrowserRouter>
   );

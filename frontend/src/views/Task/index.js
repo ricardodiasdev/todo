@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+
+import { useParams } from "react-router-dom";
 import * as S from "./styles";
 
 import api from "../../services/api";
@@ -7,7 +9,8 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 import TypeIcons from "../../utils/typeIcons";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
+import { format } from "date-fns";
 
 // import iconCalender from "../../assets/calendar.png";
 // import iconClock from "../../assets/clock.png";
@@ -21,7 +24,9 @@ function Task() {
   const [description, setDescription] = useState();
   const [date, setDate] = useState();
   const [hour, setHour] = useState();
-  const [macaddress, setMacaddress] = useState('22:22:22:22:22:22');
+  const [macaddress, setMacaddress] = useState("22:22:22:22:22:22");
+
+  let params = useParams();
 
   useEffect(() => {
     async function lateVerify() {
@@ -32,12 +37,34 @@ function Task() {
     lateVerify();
   }, []);
 
-  async function handleSaveButton(){
-    await api.post('/task', {
-      macaddress, type, title, description, when: `${date}T${hour}:00.000`
-    })
-    .then(() => {toast.success("Tarefa cadastrada com sucesso!")})
-    .catch(() => {toast.warn("Clique na tarefa e preencha todos os campos...")})
+  useEffect(() => {
+    async function LoadTaskDetail() {
+      await api.get(`/task/${params.id}`).then((response) => {
+        setType(response.data.type);
+        setTitle(response.data.title);
+        setDescription(response.data.description);
+        setDate(format(new Date(response.data.when),'yyyy-MM-dd'));
+        setHour(format(new Date(response.data.when),'HH:mm'));
+      });
+    }
+    LoadTaskDetail();
+  }, [params.id]);
+
+  async function handleSaveButton() {
+    await api
+      .post("/task", {
+        macaddress,
+        type,
+        title,
+        description,
+        when: `${date}T${hour}:00.000`,
+      })
+      .then(() => {
+        toast.success("Tarefa cadastrada com sucesso!");
+      })
+      .catch(() => {
+        toast.warn("Clique na tarefa e preencha todos os campos...");
+      });
   }
 
   return (
