@@ -8,7 +8,7 @@ const TaskValidation = async (req, res, next) => {
   } else if (!type) {
     return res
       .status(400)
-      .json({ error: "Típo da atividade é obrigatório..." });
+      .json({ error: "Tipo da atividade é obrigatório..." });
   } else if (!title) {
     return res
       .status(400)

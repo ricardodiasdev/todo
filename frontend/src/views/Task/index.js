@@ -11,6 +11,7 @@ import Footer from "../../components/Footer";
 import TypeIcons from "../../utils/typeIcons";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
+import swal from "sweetalert";
 
 // import iconCalender from "../../assets/calendar.png";
 // import iconClock from "../../assets/clock.png";
@@ -67,7 +68,9 @@ function Task() {
         navigate("/");
       })
       .catch(() => {
-        toast.warn("Clique na tarefa e preencha todos os campos...");
+        toast.warn(
+          "Clique na tarefa e preencha todos os campos corretamente..."
+        );
       });
   }
 
@@ -85,8 +88,35 @@ function Task() {
         navigate("/");
       })
       .catch(() => {
-        toast.warn("Clique na tarefa e preencha todos os campos...");
+        toast.warn(
+          "Clique na tarefa e preencha todos os campos corretamente..."
+        );
       });
+  }
+
+  async function DeleteTask() {
+    await api.delete(`/task/${params.id}`);
+  }
+
+  function HandleDeleteButton() {
+    // await api.delete(`/task/${params.id}`)
+    swal({
+      title: "Você tem certeza?",
+      text: "Uma vez apagada, você não pode recuperar a tarefa!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        swal("Tarefa apagada com sucesso!", {
+          icon: "success",
+        });
+        DeleteTask();
+        navigate("/");
+      } else {
+        swal("Continue atualizando!");
+      }
+    });
   }
 
   return (
@@ -154,7 +184,7 @@ function Task() {
             />
             <span>CONCLUÍDO</span>
           </div>
-          <button>EXCLUIR</button>
+          {params.id && <button onClick={HandleDeleteButton}>EXCLUIR</button>}
         </S.Options>
         {!params.id ? (
           <S.Save onClick={handleSaveButton}>
