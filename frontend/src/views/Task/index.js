@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import * as S from "./styles";
 
 import api from "../../services/api";
@@ -27,6 +27,7 @@ function Task() {
   const [macaddress, setMacaddress] = useState("22:22:22:22:22:22");
 
   let params = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function lateVerify() {
@@ -35,24 +36,44 @@ function Task() {
       });
     }
     lateVerify();
-  }, []);
+  });
 
   useEffect(() => {
     async function LoadTaskDetail() {
       await api.get(`/task/${params.id}`).then((response) => {
         setType(response.data.type);
         setTitle(response.data.title);
+        setDone(response.data.done);
         setDescription(response.data.description);
-        setDate(format(new Date(response.data.when),'yyyy-MM-dd'));
-        setHour(format(new Date(response.data.when),'HH:mm'));
+        setDate(format(new Date(response.data.when), "yyyy-MM-dd"));
+        setHour(format(new Date(response.data.when), "HH:mm"));
       });
     }
     LoadTaskDetail();
   }, [params.id]);
 
+  async function handleUpdateButton() {
+    await api
+      .put(`/task/${params.id}`, {
+        macaddress,
+        done,
+        type,
+        title,
+        description,
+        when: `${date}T${hour}:00.000`,
+      })
+      .then(() => {
+        toast.success("Tarefa atualizada com sucesso!");
+        navigate("/");
+      })
+      .catch(() => {
+        toast.warn("Clique na tarefa e preencha todos os campos...");
+      });
+  }
+
   async function handleSaveButton() {
     await api
-      .post("/task", {
+      .post(`/task`, {
         macaddress,
         type,
         title,
@@ -61,6 +82,7 @@ function Task() {
       })
       .then(() => {
         toast.success("Tarefa cadastrada com sucesso!");
+        navigate("/");
       })
       .catch(() => {
         toast.warn("Clique na tarefa e preencha todos os campos...");
@@ -134,9 +156,15 @@ function Task() {
           </div>
           <button>EXCLUIR</button>
         </S.Options>
-        <S.Save onClick={handleSaveButton}>
-          <button>SALVAR</button>
-        </S.Save>
+        {!params.id ? (
+          <S.Save onClick={handleSaveButton}>
+            <button>SALVAR</button>
+          </S.Save>
+        ) : (
+          <S.Save onClick={handleUpdateButton}>
+            <button>ATUALIZAR</button>
+          </S.Save>
+        )}
       </S.Form>
       <Footer />
     </S.Container>

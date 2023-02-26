@@ -4,13 +4,13 @@ import * as S from "./styles";
 
 import typeIcons from '../../utils/typeIcons'
 
-function TaskCard({ type, title, when }) {
+function TaskCard({ type, title, when, done }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const date = useMemo(() => format(new Date(when), "dd/MM/yyyy"));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const hour = useMemo(() => format(new Date(when), "HH:mm"));
   return (
-    <S.Container>
+    <S.Container done={done}>
       <S.TopCard>
         <img src={typeIcons[type]} alt="Icone da tarefa" />
         <h3>{title}</h3>
