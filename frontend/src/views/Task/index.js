@@ -17,7 +17,6 @@ import swal from "sweetalert";
 // import iconClock from "../../assets/clock.png";
 
 function Task() {
-  const [lateCount, setLateCount] = useState();
   const [type, setType] = useState();
   const [id, setId] = useState();
   const [done, setDone] = useState(false);
@@ -29,15 +28,6 @@ function Task() {
 
   let params = useParams();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    async function lateVerify() {
-      await api.get(`/task/filter/late/22:22:22:22:22:22`).then((response) => {
-        setLateCount(response.data.length);
-      });
-    }
-    lateVerify();
-  });
 
   useEffect(() => {
     async function LoadTaskDetail() {
@@ -121,7 +111,7 @@ function Task() {
 
   return (
     <S.Container>
-      <Header lateCount={lateCount} />
+      <Header />
       <S.Form>
         <S.TypeIcons>
           {TypeIcons.map(

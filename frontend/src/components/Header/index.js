@@ -1,12 +1,25 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import * as S from "./styles";
+
+import api from "../../services/api";
 
 import { Link } from "react-router-dom";
 
 import logo from "../../assets/logo.png";
 import bell from "../../assets/bell.png";
 
-function Header({ lateCount, clickBell }) {
+function Header({ clickBell }) {
+  const [lateCount, setLateCount] = useState();
+
+  useEffect(() => {
+    async function lateVerify() {
+      await api.get(`/task/filter/late/22:22:22:22:22:22`).then((response) => {
+        setLateCount(response.data.length);
+      });
+    }
+    lateVerify();
+  }, []);
+
   return (
     <S.Container>
       <S.LeftSide>
