@@ -15,10 +15,15 @@ function QrCode() {
   const navigate = useNavigate();
 
   function handleSaveMac() {
-    localStorage.setItem("@todo/macaddress", mac);
-    toast.success("Mac Address salvo com sucesso!");
-    navigate("/");
-    window.location.reload();
+    if (!mac) {
+      toast.warn("Você precisa digitar o número que apareceu no celular!");
+    } else {
+      localStorage.setItem("@todo/macaddress", mac);
+      toast.success("Mac Address salvo com sucesso!");
+      navigate("/");
+      setTimeout(() => window.location.reload(), 2000);
+      ;
+    }
   }
 
   return (

@@ -5,6 +5,8 @@ import api from "../../services/api";
 
 import { Link } from "react-router-dom";
 
+import swal from "sweetalert";
+
 import logo from "../../assets/logo.png";
 import bell from "../../assets/bell.png";
 
@@ -15,7 +17,7 @@ function Header({ clickBell }) {
 
   useEffect(() => {
     async function lateVerify() {
-      await api.get(`/task/filter/late/22:22:22:22:22:22`).then((response) => {
+      await api.get(`/task/filter/late/${isConnected}`).then((response) => {
         setLateCount(response.data.length);
       });
     }
@@ -23,8 +25,25 @@ function Header({ clickBell }) {
   }, []);
 
   async function Logout() {
-    localStorage.removeItem("@todo/macaddress");
-    window.location.reload();
+    swal({
+      title: "Sair",
+      text: "Você tem certeza?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willQuit) => {
+      if (willQuit) {
+        swal("Até logo!", {
+          icon: "success",
+        });
+        localStorage.removeItem("@todo/macaddress");
+        setTimeout(() => window.location.reload(), 2000);
+      } else {
+        swal("Continue gerenciando suas tarefas!");
+        setTimeout(() => window.location.reload(), 2000);
+      }
+    });
+    
   }
 
   return (

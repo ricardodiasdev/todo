@@ -25,7 +25,7 @@ function Task() {
   const [description, setDescription] = useState();
   const [date, setDate] = useState();
   const [hour, setHour] = useState();
-  const [macaddress, setMacaddress] = useState("22:22:22:22:22:22");
+
 
   let params = useParams();
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ function Task() {
   async function handleUpdateButton() {
     await api
       .put(`/task/${params.id}`, {
-        macaddress,
+        macaddress: isConnected,
         done,
         type,
         title,
@@ -71,7 +71,7 @@ function Task() {
   async function handleSaveButton() {
     await api
       .post(`/task`, {
-        macaddress,
+        macaddress: isConnected,
         type,
         title,
         description,

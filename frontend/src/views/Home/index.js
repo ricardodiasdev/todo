@@ -8,6 +8,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import FilterCard from "../../components/FilterCard";
 import TaskCard from "../../components/TaskCards";
+import isConnected from "../../utils/IsConnected";
 
 function Home() {
   const [filterActived, setFilterActived] = useState("all");
@@ -16,7 +17,7 @@ function Home() {
   useEffect(() => {
     async function loadTasks() {
       await api
-        .get(`/task/filter/${filterActived}/22:22:22:22:22:22`)
+        .get(`/task/filter/${filterActived}/${isConnected}`)
         .then((response) => {
           setTasks(response.data);
         });
