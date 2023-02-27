@@ -1,31 +1,48 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as S from "./styles";
 
-import api from "../../services/api";
-import Qr from 'qrcode.react';
+import Qr from "qrcode.react";
 
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
+import { useNavigate } from "react-router-dom";
+
+import { toast } from "react-toastify";
+
 function QrCode() {
-    return (
-        <S.Container>
-            <Header/>
-            <S.Content>
-                <h1>CAPTURE O QRCODE PELO APP</h1>
-                <p>Suas atividades serão sincronizadas com as do seu celular</p>
-                <S.QrCodeArea>
-                    <Qr value='getmacaddress' size={350}/>
-                </S.QrCodeArea>
-                <S.ValidationCode>
-                    <span>Digite a numeração que apareceu no celular</span>
-                    <input type="text" />
-                    <button>Sincronizar</button>
-                </S.ValidationCode>
-            </S.Content>
-            <Footer/>
-        </S.Container>
-    )
+  const [mac, setMac] = useState();
+  const navigate = useNavigate();
+
+  function handleSaveMac() {
+    localStorage.setItem("@todo/macaddress", mac);
+    toast.success("Mac Address salvo com sucesso!");
+    navigate("/");
+    window.location.reload();
+  }
+
+  return (
+    <S.Container>
+      <Header />
+      <S.Content>
+        <h1>CAPTURE O QRCODE PELO APP</h1>
+        <p>Suas atividades serão sincronizadas com as do seu celular</p>
+        <S.QrCodeArea>
+          <Qr value="getmacaddress" size={350} />
+        </S.QrCodeArea>
+        <S.ValidationCode>
+          <span>Digite a numeração que apareceu no celular</span>
+          <input
+            type="text"
+            onChange={(e) => setMac(e.target.value)}
+            value={mac}
+          />
+          <button onClick={handleSaveMac}>Sincronizar</button>
+        </S.ValidationCode>
+      </S.Content>
+      <Footer />
+    </S.Container>
+  );
 }
 
-export default QrCode; 
+export default QrCode;

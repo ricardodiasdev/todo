@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import * as S from "./styles";
 
 import api from "../../services/api";
@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 
 import logo from "../../assets/logo.png";
 import bell from "../../assets/bell.png";
+
+import isConnected from "../../utils/IsConnected";
 
 function Header({ clickBell }) {
   const [lateCount, setLateCount] = useState();
@@ -20,6 +22,11 @@ function Header({ clickBell }) {
     lateVerify();
   }, []);
 
+  async function Logout() {
+    localStorage.removeItem("@todo/macaddress");
+    window.location.reload();
+  }
+
   return (
     <S.Container>
       <S.LeftSide>
@@ -30,7 +37,11 @@ function Header({ clickBell }) {
         <span className="divider">|</span>
         <Link to={"/task"}>NOVA TAREFA</Link>
         <span className="divider">|</span>
-        <Link to={"/qrcode"}>SINCRONIZAR TAREFA</Link>
+        {!isConnected ? (
+          <Link to={"/qrcode"}>SINCRONIZAR TAREFA</Link>
+        ) : (
+          <button onClick={Logout}>SAIR</button>
+        )}
         {lateCount && (
           <>
             <span className="divider">|</span>

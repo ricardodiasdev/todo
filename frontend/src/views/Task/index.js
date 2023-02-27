@@ -12,6 +12,7 @@ import TypeIcons from "../../utils/typeIcons";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
 import swal from "sweetalert";
+import isConnected from "../../utils/IsConnected";
 
 // import iconCalender from "../../assets/calendar.png";
 // import iconClock from "../../assets/clock.png";
@@ -31,6 +32,9 @@ function Task() {
 
   useEffect(() => {
     async function LoadTaskDetail() {
+      if(!isConnected){
+        navigate("/qrcode");
+      }
       await api.get(`/task/${params.id}`).then((response) => {
         setType(response.data.type);
         setTitle(response.data.title);
@@ -41,7 +45,7 @@ function Task() {
       });
     }
     LoadTaskDetail();
-  }, [params.id]);
+  }, [params.id, navigate]);
 
   async function handleUpdateButton() {
     await api
