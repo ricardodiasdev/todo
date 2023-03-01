@@ -25,6 +25,24 @@ const styles = StyleSheet.create({
     color: "#20295f",
     opacity: 0.5,
   },
+  content: {
+    width: '100%',
+    marginTop: 30
+  },
+  title:{
+    width: '100%',
+    borderBottomWidth: 1,
+    borderColor: '#20295F',
+    alignItems: 'center'
+  },
+  titleText:{
+    color: '#20295F',
+    fontSize: 18,
+    position: 'relative',
+    top: 11,
+    backgroundColor: '#fff',
+    paddingHorizontal: 10,
+  }
 });
 
 export default styles;
