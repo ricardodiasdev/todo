@@ -12,7 +12,7 @@ import { TouchableOpacity } from "react-native";
 
 import api from "../../services/api";
 
-export default function Home() {
+export default function Home({ navigation }) {
   const [filter, setFilter] = useState("today");
   const [tasks, setTasks] = useState([]);
   const [load, setLoad] = useState(false);
@@ -48,6 +48,10 @@ export default function Home() {
 
   function Notification() {
     setFilter("late");
+  }
+
+  function NewTask() {
+    navigation.navigate("Task");
   }
 
   return (
@@ -116,7 +120,9 @@ export default function Home() {
         </TouchableOpacity>
       </View>
       <View style={styles.title}>
-        <Text style={styles.titleText}>TAREFAS {filter == 'late' && ' ATRASADAS'}</Text>
+        <Text style={styles.titleText}>
+          TAREFAS {filter == "late" && " ATRASADAS"}
+        </Text>
       </View>
       <ScrollView
         style={styles.content}
@@ -135,7 +141,7 @@ export default function Home() {
           ))
         )}
       </ScrollView>
-      <Footer icon={"add"} />
+      <Footer icon={"add"} onPress={NewTask}/>
     </View>
   );
 }
