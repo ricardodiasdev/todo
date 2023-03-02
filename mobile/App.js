@@ -5,7 +5,7 @@ import Task from "./src/views/Task";
 export default function App() {
   return (
     <>
-      <Task />
+      <Home />
     </>
   );
 }

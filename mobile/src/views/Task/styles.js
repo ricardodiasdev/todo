@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 10,
+    marginBottom: 40
   },
   inputInline: {
     flexDirection: "row",
