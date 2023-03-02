@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TouchableOpacity, Image, TextInput, Alert } from "react-native";
+import { TouchableOpacity, Image, TextInput } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { format } from "date-fns";
@@ -10,22 +10,21 @@ import iconCalendar from "../../assets/calendar.png";
 import iconClock from "../../assets/clock.png";
 
 export default function DateTimeInput({ type, save }) {
-
   const [dateTime, setDateTime] = useState();
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState("date");
 
   const newTime = (event, value) => {
     const currentDate = value || dateTime;
-    
+
     if (type == "date") {
       setShow(false);
       setDateTime(format(new Date(currentDate), "dd/MM/yyyy"));
       save(format(new Date(currentDate), "yyyy-MM-dd"));
     } else {
       setShow(false);
-      setDateTime(format(new Date(currentDate), "HH:mm"));
-      save(format(new Date(currentDate), "HH:mm"));
+      setDateTime(format(new Date(currentDate), "HH:mm:SS"));
+      save(format(new Date(currentDate), "HH:mm:SS"));
     }
   };
 
@@ -40,7 +39,6 @@ export default function DateTimeInput({ type, save }) {
   }
 
   return (
-
     <TouchableOpacity onPress={selectDataOrHour}>
       <TextInput
         style={styles.input}

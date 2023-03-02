@@ -8,6 +8,7 @@ import {
   Switch,
   Image,
   ScrollView,
+  Alert,
 } from "react-native";
 
 import Header from "../../components/Header";
@@ -18,8 +19,36 @@ import styles from "./styles";
 
 import typeIcons from "../../utils/typeIcons";
 
-export default function Task({navigation}) {
+import api from "../../services/api";
+
+export default function Task({ navigation }) {
   const [done, setDone] = useState(false);
+  const [type, setType] = useState();
+  const [title, setTitle] = useState();
+  const [description, setDescription] = useState();
+  const [date, setDate] = useState();
+  const [hour, setHour] = useState();
+  const [macaddress, setMacaddress] = useState("22:22:22:22:22:22");
+
+  async function NewTask() {
+    if (!title) return Alert.alert("Defina o nome da tarefa");
+    if (!description) return Alert.alert("Defina a descrição da tarefa");
+    if (!type) return Alert.alert("Defina o tipo da tarefa");
+    if (!date) return Alert.alert("Defina a data da tarefa");
+    if (!hour) return Alert.alert("Defina a hora da tarefa");
+
+    await api
+      .post("/task", {
+        macaddress: macaddress,
+        type: type,
+        title: title,
+        description: description,
+        when: `${date}T${hour}.000`,
+      })
+      .then(() => navigation.navigate("Home"))
+      .catch((error) => console.log(error));
+  }
+
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <Header showBack={true} navigation={navigation} />
@@ -30,10 +59,17 @@ export default function Task({navigation}) {
           style={{ marginVertical: 10 }}
         >
           {typeIcons.map(
-            (icon) =>
+            (icon, index) =>
               icon !== null && (
-                <TouchableOpacity>
-                  <Image source={icon} style={styles.imageIcon} />
+                <TouchableOpacity key={index} onPress={() => setType(index)}>
+                  <Image
+                    source={icon}
+                    style={[
+                      styles.imageIcon,
+                      type && type != index && styles.typeIconInative,
+                    ]}
+                    setType={index}
+                  />
                 </TouchableOpacity>
               )
           )}
@@ -43,6 +79,8 @@ export default function Task({navigation}) {
           style={styles.input}
           maxLength={30}
           placeholder="Lembre-me de fazer..."
+          onChangeText={(text) => setTitle(text)}
+          value={title}
         />
         <Text style={styles.label}>Detalhes</Text>
         <TextInput
@@ -50,9 +88,11 @@ export default function Task({navigation}) {
           maxLength={200}
           multiline={true}
           placeholder="Detalhes da atividade que eu tenho que lembrar..."
+          onChangeText={(text) => setDescription(text)}
+          value={description}
         />
-        <DateTimeInput type={'date'}/>
-        <DateTimeInput type={'time'}/>
+        <DateTimeInput type={"date"} save={setDate} />
+        <DateTimeInput type={"time"} save={setHour} />
         <View style={styles.inLine}>
           <View style={styles.inputInline}>
             <Switch
@@ -67,7 +107,7 @@ export default function Task({navigation}) {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <Footer icon={"save"} />
+      <Footer icon={"save"} onPress={NewTask} />
     </KeyboardAvoidingView>
   );
 }

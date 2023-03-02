@@ -141,7 +141,7 @@ export default function Home({ navigation }) {
           ))
         )}
       </ScrollView>
-      <Footer icon={"add"} onPress={NewTask}/>
+      <Footer icon={"add"} onPress={NewTask} />
     </View>
   );
 }

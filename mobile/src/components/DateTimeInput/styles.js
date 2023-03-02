@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     top: 35,
     width: 25,
     height: 25,
-    resizeMode: 'contain'
+    resizeMode: "contain",
   },
 });
 

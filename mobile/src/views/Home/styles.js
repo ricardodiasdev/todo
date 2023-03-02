@@ -26,23 +26,23 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   content: {
-    width: '100%',
-    marginTop: 30
+    width: "100%",
+    marginTop: 30,
   },
-  title:{
-    width: '100%',
+  title: {
+    width: "100%",
     borderBottomWidth: 1,
-    borderColor: '#20295F',
-    alignItems: 'center'
+    borderColor: "#20295F",
+    alignItems: "center",
   },
-  titleText:{
-    color: '#20295F',
+  titleText: {
+    color: "#20295F",
     fontSize: 18,
-    position: 'relative',
+    position: "relative",
     top: 11,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingHorizontal: 10,
-  }
+  },
 });
 
 export default styles;
