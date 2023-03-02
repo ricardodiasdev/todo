@@ -21,7 +21,7 @@ export default function Home() {
     async function loadTasks() {
       setLoad(true);
       await api
-        .get("/task/filter/all/22:22:22:22:22:22")
+        .get(`/task/filter/${filter}/22:22:22:22:22:22`)
         .then((response) => {
           setTasks(response.data);
           setLoad(false);
@@ -29,7 +29,7 @@ export default function Home() {
         .catch((error) => console.log(error));
     }
     loadTasks();
-  }, []);
+  }, [filter]);
 
   return (
     <View style={styles.container}>
