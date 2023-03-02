@@ -16,6 +16,7 @@ export default function Home() {
   const [filter, setFilter] = useState("today");
   const [tasks, setTasks] = useState([]);
   const [load, setLoad] = useState(false);
+  const [lateCount, setLateCount] = useState();
 
   useEffect(() => {
     async function loadTasks() {
@@ -31,9 +32,32 @@ export default function Home() {
     loadTasks();
   }, [filter]);
 
+  useEffect(() => {
+    async function lateVerify() {
+      setLoad(true);
+      await api
+        .get(`/task/filter/late/22:22:22:22:22:22`)
+        .then((response) => {
+          setLateCount(response.data.length);
+          setLoad(false);
+        })
+        .catch((error) => console.log(error));
+    }
+    lateVerify();
+  }, [filter]);
+
+  function Notification() {
+    setFilter("late");
+  }
+
   return (
     <View style={styles.container}>
-      <Header showNotification={true} showBack={false} />
+      <Header
+        showNotification={true}
+        showBack={false}
+        pressNotification={Notification}
+        late={lateCount}
+      />
       <View style={styles.filter}>
         <TouchableOpacity onPress={() => setFilter("all")}>
           <Text
@@ -92,7 +116,7 @@ export default function Home() {
         </TouchableOpacity>
       </View>
       <View style={styles.title}>
-        <Text style={styles.titleText}>TAREFAS</Text>
+        <Text style={styles.titleText}>TAREFAS {filter == 'late' && ' ATRASADAS'}</Text>
       </View>
       <ScrollView
         style={styles.content}
