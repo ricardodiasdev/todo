@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { TouchableOpacity, Image, TextInput } from "react-native";
+import { TouchableOpacity, Image, TextInput, Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-import { format } from "date-fns";
+import { format, isPast } from "date-fns";
 
 import styles from "./styles";
 
@@ -16,12 +16,15 @@ export default function DateTimeInput({ type, save, date, hour }) {
 
   const newTime = (event, value) => {
     const currentDate = value || dateTime;
-
     if (type == "date") {
-      setShow(false);
-      setDateTime(format(new Date(currentDate), "dd/MM/yyyy"));
-      save(format(new Date(currentDate), "yyyy-MM-dd"));
-    } else {
+      if(isPast(new Date(currentDate))){
+        Alert.alert('Você não pode escolher uma data passada')
+      } else {
+        setShow(false);
+        setDateTime(format(new Date(currentDate), "dd/MM/yyyy"));
+        save(format(new Date(currentDate), "yyyy-MM-dd"));
+      }
+    } else  {
       setShow(false);
       setDateTime(format(new Date(currentDate), "HH:mm"));
       save(format(new Date(currentDate), "HH:mm:ss"));
@@ -29,6 +32,7 @@ export default function DateTimeInput({ type, save, date, hour }) {
   };
 
   async function selectDataOrHour() {
+
     if (type == "date") {
       setShow(true);
       setMode("date");

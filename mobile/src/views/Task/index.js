@@ -53,13 +53,27 @@ export default function Task({ navigation }) {
     }
   }, [macaddress]);
 
-  async function NewTask() {
+  async function SaveTask() {
     if (!title) return Alert.alert("Defina o nome da tarefa");
     if (!description) return Alert.alert("Defina a descrição da tarefa");
     if (!type) return Alert.alert("Defina o tipo da tarefa");
     if (!date) return Alert.alert("Defina a data da tarefa");
     if (!hour) return Alert.alert("Defina a hora da tarefa");
-    await api
+
+    if(id){
+      await api
+      .put(`/task/${id}`, {
+        macaddress: macaddress,
+        done: done,
+        type: type,
+        title: title,
+        description: description,
+        when: `${date}T${hour}.000`,
+      })
+      .then(() => navigation.navigate("Home"))
+      .catch((error) => console.log(error));
+    } else {
+      await api
       .post("/task", {
         macaddress: macaddress,
         type: type,
@@ -69,6 +83,7 @@ export default function Task({ navigation }) {
       })
       .then(() => navigation.navigate("Home"))
       .catch((error) => console.log(error));
+    }
   }
 
   useEffect(() => {
@@ -150,7 +165,7 @@ export default function Task({ navigation }) {
           )}
         </ScrollView>
       )}
-      <Footer icon={"save"} onPress={NewTask} />
+      <Footer icon={"save"} onPress={SaveTask} />
     </KeyboardAvoidingView>
   );
 }

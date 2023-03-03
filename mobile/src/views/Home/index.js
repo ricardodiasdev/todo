@@ -153,7 +153,7 @@ export default function Home({ navigation }) {
         ) : (
           tasks.map((task) => (
             <TaskCard
-              done={false}
+              done={task.done}
               title={task.title}
               when={task.when}
               type={task.type}
