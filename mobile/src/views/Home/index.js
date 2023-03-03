@@ -15,7 +15,7 @@ import * as Application from "expo-application";
 
 
 export default function Home({ navigation }) {
-  const [filter, setFilter] = useState('today');
+  const [filter, setFilter] = useState();
   const [tasks, setTasks] = useState([]);
   const [load, setLoad] = useState(false);
   const [lateCount, setLateCount] = useState();
@@ -31,8 +31,8 @@ export default function Home({ navigation }) {
         setMacaddress(Application.androidId);
       }
     }
-    getMacAddress();
-  });
+    getMacAddress().then(() => setFilter('today'));
+  },[]);
 
   useEffect(() => {
     async function loadTasks() {

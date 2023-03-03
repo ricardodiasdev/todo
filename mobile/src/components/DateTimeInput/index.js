@@ -9,7 +9,7 @@ import styles from "./styles";
 import iconCalendar from "../../assets/calendar.png";
 import iconClock from "../../assets/clock.png";
 
-export default function DateTimeInput({ type, save }) {
+export default function DateTimeInput({ type, save, date, hour }) {
   const [dateTime, setDateTime] = useState();
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState("date");
@@ -23,8 +23,8 @@ export default function DateTimeInput({ type, save }) {
       save(format(new Date(currentDate), "yyyy-MM-dd"));
     } else {
       setShow(false);
-      setDateTime(format(new Date(currentDate), "HH:mm:SS"));
-      save(format(new Date(currentDate), "HH:mm:SS"));
+      setDateTime(format(new Date(currentDate), "HH:mm"));
+      save(format(new Date(currentDate), "HH:mm:ss"));
     }
   };
 
@@ -37,6 +37,20 @@ export default function DateTimeInput({ type, save }) {
       setMode("time");
     }
   }
+
+  useEffect(() => {
+    async function showDateAndHour() {
+      if (type === "date" && date) {
+        setDateTime(format(new Date(date), "dd/MM/yyyy"));
+        save(format(new Date(date), "yyyy-MM-dd"));
+      }
+      if (type === "time" && hour) {
+        setDateTime(format(new Date(hour), "HH:mm"));
+        save(format(new Date(hour), "HH:mm:ss"));
+      }
+    }
+    showDateAndHour();
+  });
 
   return (
     <TouchableOpacity onPress={selectDataOrHour}>
