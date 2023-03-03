@@ -1,10 +1,13 @@
 import React from "react";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 
-console.disableYellowBox = true;
+import { LogBox} from 'react-native';
+LogBox.ignoreAllLogs();
 
 import Home from "./src/views/Home";
 import Task from "./src/views/Task";
+
+
 
 const Routes = createAppContainer(
   createSwitchNavigator({

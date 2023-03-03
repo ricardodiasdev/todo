@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from "react-native";
 
 import styles from "./styles";
 
@@ -8,21 +8,37 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import TaskCard from "../../components/TaskCard";
 
-import { TouchableOpacity } from "react-native";
 
 import api from "../../services/api";
 
+import * as Application from "expo-application";
+
+
 export default function Home({ navigation }) {
-  const [filter, setFilter] = useState("today");
+  const [filter, setFilter] = useState('today');
   const [tasks, setTasks] = useState([]);
   const [load, setLoad] = useState(false);
   const [lateCount, setLateCount] = useState();
+  const [macaddress, setMacaddress] = useState();
+
+  useEffect(() => {
+    async function getMacAddress() {
+      if (Platform.OS === "ios") {
+        Application.getIosIdForVendorAsync().then((id) => {
+          setMacaddress(id);
+        });
+      } else {
+        setMacaddress(Application.androidId);
+      }
+    }
+    getMacAddress();
+  });
 
   useEffect(() => {
     async function loadTasks() {
       setLoad(true);
       await api
-        .get(`/task/filter/${filter}/22:22:22:22:22:22`)
+        .get(`/task/filter/${filter}/${macaddress}`)
         .then((response) => {
           setTasks(response.data);
           setLoad(false);
@@ -36,7 +52,7 @@ export default function Home({ navigation }) {
     async function lateVerify() {
       setLoad(true);
       await api
-        .get(`/task/filter/late/22:22:22:22:22:22`)
+        .get(`/task/filter/late/${macaddress}`)
         .then((response) => {
           setLateCount(response.data.length);
           setLoad(false);
@@ -52,6 +68,10 @@ export default function Home({ navigation }) {
 
   function NewTask() {
     navigation.navigate("Task");
+  }
+
+  function ShowTask(id){
+    navigation.navigate("Task", {idtask: id});
   }
 
   return (
@@ -137,6 +157,7 @@ export default function Home({ navigation }) {
               title={task.title}
               when={task.when}
               type={task.type}
+              onPress={() => ShowTask(task._id)}
             />
           ))
         )}
