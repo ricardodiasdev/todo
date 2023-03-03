@@ -74,6 +74,7 @@ export default function Home({ navigation }) {
     navigation.navigate("Task", {idtask: id});
   }
 
+ 
   return (
     <View style={styles.container}>
       <Header

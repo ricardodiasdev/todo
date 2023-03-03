@@ -16,15 +16,13 @@ export default function DateTimeInput({ type, save, date, hour }) {
 
   const newTime = (event, value) => {
     const currentDate = value || dateTime;
+    
     if (type == "date") {
-      if(isPast(new Date(currentDate))){
-        Alert.alert('Você não pode escolher uma data passada')
-      } else {
         setShow(false);
         setDateTime(format(new Date(currentDate), "dd/MM/yyyy"));
         save(format(new Date(currentDate), "yyyy-MM-dd"));
       }
-    } else  {
+    else  {
       setShow(false);
       setDateTime(format(new Date(currentDate), "HH:mm"));
       save(format(new Date(currentDate), "HH:mm:ss"));

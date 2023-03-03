@@ -53,7 +53,25 @@ export default function Task({ navigation }) {
     }
   }, [macaddress]);
 
-  async function SaveTask() {
+  useEffect(() => {
+    async function LoadTask() {
+      setLoad(true);
+      await api.get(`task/${id}`).then((response) => {
+        setDone(response.data.done);
+        setType(response.data.type);
+        setTitle(response.data.title);
+        setDescription(response.data.description);
+        setDate(response.data.when);
+        setHour(response.data.when);
+      });
+    }
+    LoadTask()
+    .then(() =>  setLoad(false))
+    .catch((error) => console.log(error));
+
+  }, [id]);
+
+  async function handleSaveTask() {
     if (!title) return Alert.alert("Defina o nome da tarefa");
     if (!description) return Alert.alert("Defina a descrição da tarefa");
     if (!type) return Alert.alert("Defina o tipo da tarefa");
@@ -86,20 +104,23 @@ export default function Task({ navigation }) {
     }
   }
 
-  useEffect(() => {
-    async function LoadTask() {
-      setLoad(true);
-      await api.get(`task/${id}`).then((response) => {
-        setDone(response.data.done);
-        setType(response.data.type);
-        setTitle(response.data.title);
-        setDescription(response.data.description);
-        setDate(response.data.when);
-        setHour(response.data.when);
-      });
-    }
-    LoadTask().then(() =>  setLoad(false));
-  }, [id]);
+  async function removeTask(){
+    await api.delete(`/task/${id}`)
+    .then(() => navigation.navigate("Home"))
+    .catch((error) => console.log(error));
+  }
+
+  async function handleRemoveTask(){
+    Alert.alert(
+      'Remover Tarefa',
+      'A tarefa será removida',
+      [
+        {text: 'Cancelar'},
+        {text: 'Confirmar', onPress: () => removeTask()},
+      ],
+      {cancelable: true}
+    )
+  }
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -158,14 +179,14 @@ export default function Task({ navigation }) {
                 />
                 <Text style={styles.switchLabel}>Concluído</Text>
               </View>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleRemoveTask}>
                 <Text style={styles.removeLabel}>EXCLUIR</Text>
               </TouchableOpacity>
             </View>
           )}
         </ScrollView>
       )}
-      <Footer icon={"save"} onPress={SaveTask} />
+      <Footer icon={"save"} onPress={handleSaveTask} />
     </KeyboardAvoidingView>
   );
 }
