@@ -21,6 +21,10 @@ export default function Header({
     navigation.navigate("Home");
   }
 
+  function OpenQrCode(){
+    navigation.navigate("QRCode");
+  }
+
   return (
     <View style={styles.header}>
       {showBack ? (
@@ -28,7 +32,7 @@ export default function Header({
           <Image source={back} style={styles.leftIconImage} />
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity style={styles.leftIcon}>
+        <TouchableOpacity style={styles.leftIcon} onPress={OpenQrCode}>
           <Image source={qrcode} style={styles.leftIconImage} />
         </TouchableOpacity>
       )}
